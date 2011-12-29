@@ -676,9 +676,17 @@ function _wp_filter_build_unique_id($tag, $function, $priority) {
 	global $wp_filter;
 	static $filter_id_count = 0;
 
+	if($function instanceof Closure){
+		return spl_object_hash($function);
+	}
+
 	// If function then just skip all of the tests and not overwrite the following.
 	if ( is_string($function) )
 		return $function;
+	// Closure Calling
+	else if($function instanceof Closure){
+		return spl_object_hash($function);
+	}
 	// Object Class Calling
 	else if (is_object($function[0]) ) {
 		$obj_idx = get_class($function[0]).$function[1];
